@@ -1,0 +1,130 @@
+# Jayson D. Baya, September 29, 2022
+import random
+
+'''
+Prints a short message welcoming the user to this Monty Hall Simulation
+Parameters : None
+Return: None
+'''
+
+def print_welcome():
+    print("Welcome to the Monty Hall Simulation")
+    
+'''
+Determines a random integer in the list [1, 2, 3]
+Parameters : None
+Return value: the random integer
+'''
+
+def get_winning_door_number():
+    # add code to return a random integer
+    val = random.randint(1,3)
+    return val
+
+'''
+Prompts the user to enter an integer ("choose a door"), either 1, 2, or 3;
+Parameters : None
+Return value: the integer value of the user's input
+'''
+
+def get_player_door_choice():
+    door_choice = int(input("Choose a door by entering 1, 2, or 3: "))
+    if door_choice not in [1,2,3]:
+        print("Warning!", door_choice, "is not valid input.")
+        return 1
+    else:
+        return door_choice
+    
+'''
+This function acts as the "host" by choosing a losing door to reveal,
+then prints a message such as, "Door 2 is opened to reveal a goat!".
+Parameters: Two parameter (number of winning door, number of door_choice)
+Return: Nothing
+Hint: One way to implement this function is with the list.remove() method.
+'''
+
+def print_losing_door_message(win_door, player_door): # just test this - Dr. Wahl
+    door_list = [1,2,3]
+    list.remove(door_list,win_door)
+    if player_door in door_list:
+        list.remove(door_list, player_door)
+    losing_door = random.choice(door_list)
+    print("Door", losing_door, "is opened to reveal the goat")
+    return losing_door
+
+'''
+This function asks the player whether they want to switch
+-to the other unopened door and reads their answer from keyboard input.
+Paramters: None
+Return: None
+Hint: You can implement this function with a single line of code,
+a call to the input() function with a string argument (the prompt).
+'''
+def ask_switch():
+    input("Do you want to switch to the other closed door? (yes/no) ")
+
+        
+'''
+If the player's chosen door is the winning door,
+prints the message, "If you DO NOT switch, you will win!";
+otherwise, prints the message, "If you SWITCH, you will win!".
+Parameter: Two parameter (Number of winning door, number of door_choice)
+Return: "switch" if switching is the winning strategy for this round,
+otherwise returns the string "don't switch".
+'''
+def get_winning_strategy(win_door, player_door):
+    if win_door == player_door:
+        print("If you DO NOT switch, you will win!")
+        return "don't switch"
+    else:
+        print("If you Switch, you will win!")
+        return "switch"
+
+
+'''
+Prompts the user to ask:
+whether or not they want to continue the simulation or end it.
+Parameter: None
+Return: True if they choose to continue, False otherwise. 
+'''
+def ask_player_continue():
+    go_stop = input("Do you want to continue? (G for Go, S for Stop) ")
+    if go_stop.lower() in ['g', 'go', 'y', 'yes']:
+        return True
+    return False
+   
+'''
+Parameter: Integer parameters
+           How many times switching and not switching..
+           was the winning strategy and report it.
+           - nearest tenth of a percent
+Return: None
+'''
+def print_summary(acc_switch, acc_dont_switch):
+    print("WINNING PERCENTAGES")
+    num_rounds = acc_switch + acc_dont_switch
+    switch_pct = round((acc_switch / num_rounds * 100), 1)
+    not_switch_pct = round((100 - switch_pct), 1)
+    print("Switching:", str(switch_pct) + "%")
+    print("NOT switching:", str(not_switch_pct) + "%")
+    print("Number of rounds played:", num_rounds)
+
+
+def main():
+    acc_switch = 0
+    acc_dont_switch = 0
+    for i in range(1000):
+        print_welcome()
+        win_door = get_winning_door_number() 
+        player_door = get_player_door_choice()
+        losingD = print_losing_door_message(win_door, player_door)
+        ask_switch()
+        if get_winning_strategy(win_door, player_door) ==  "switch":
+            acc_switch = acc_switch + 1
+        else:
+            acc_dont_switch = acc_dont_switch + 1
+        if ask_player_continue() == False:
+            break
+    print_summary(acc_switch, acc_dont_switch)
+
+main()

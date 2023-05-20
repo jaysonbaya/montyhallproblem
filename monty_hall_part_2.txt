@@ -1,0 +1,80 @@
+# Jayson Baya, Oct 8, 2022
+import random
+from bridges import Bridges
+from bridges_barchart import make_barchart
+
+'''
+Prints a short message welcoming the user to this Monty Hall Simulation
+Parameters : None
+Return: None
+'''
+
+def print_welcome():
+    print("Welcome to the Monty Hall Problem Simulator")
+    
+'''
+Queries the user to find out how many rounds they would like in the simulation
+(user should enter a positive integer).
+Returns a positive integer result.
+Note: If the user enters an integer which is less than or equal to zero
+the function will print a warning message and return 10000. 
+'''
+
+def ask_user_num_rounds():
+    rounds = int(input("How many round would you like? "))
+    if rounds <= 0:
+        print("Please enter 1 and above!")
+        return 1000
+    return rounds
+
+'''
+Runs the simulation for num_rounds rounds,
+and returns acc_switch (an integer),
+the number of times that "switch" is the winning strategy.
+'''
+
+def get_simulation_results(num_rounds):
+    acc_switch = 0
+    for i in range(num_rounds):
+        win_door = random.randint(1,3)
+        player_door = random.randint(1,3)
+        door_list = [1,2,3]
+        if win_door != player_door:
+            acc_switch = acc_switch + 1
+    acc_switch = acc_switch/num_rounds * 100
+    print("I will simulate", num_rounds, "rounds for you.")
+    return acc_switch
+
+'''
+Creates a Bridges barchart of the simulation results. Returns None.
+'''
+def draw_chart(num_rounds, acc_switch):
+    bridges = Bridges(2, "bayaj26", "1449956369779")
+    bridges.set_title("Creating a Barchart with a Symbol Collection")
+    bridges.set_description('Visualize a two-category comparison in BRIDGES')
+
+    # set up the arguments for creating the barchart
+    chart_title = "Monty Hall Simulation Results"
+    name_1 = "Switching Wins"
+    name_2 = "Not Switching Wins"
+    name_3 = "Number of Rounds: " + str(num_rounds)
+    count_1 = acc_switch  # some positive integer
+    count_2 = 100 - acc_switch # another positive integer
+    color_1 = "yellow"   # can you find other valid color names on the web?
+    color_2 = "green"    # hint: https://www.w3.org/TR/css-color-3/#svg-color
+
+
+    # create the barchart and visualize it on the web
+    chart = make_barchart(chart_title, name_1, name_2, name_3, count_1, count_2, color_1, color_2)
+    bridges.set_data_structure(chart)
+    bridges.visualize()
+
+
+def main():
+    print_welcome()
+    num_rounds = ask_user_num_rounds()
+    acc_switch = get_simulation_results(num_rounds)
+    draw_chart(num_rounds, acc_switch)
+
+    
+main()
